@@ -19,9 +19,6 @@ public class CardCreatedDto {
     @NotBlank(message = "Expire date not entered")
     private String expire_date;
 
-    @NotBlank(message = "Owner id not entered")
-    private UUID owner_id;
-
     @NotBlank(message = "Card type not entered")
     private CardType card_type;
 
