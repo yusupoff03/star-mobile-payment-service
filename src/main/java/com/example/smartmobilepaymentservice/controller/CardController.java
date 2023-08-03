@@ -1,10 +1,14 @@
-package com.example.smartmobilepaymentservice.Controller;
+package com.example.smartmobilepaymentservice.controller;
 
 import com.example.smartmobilepaymentservice.dto.CardCreatedDto;
 import com.example.smartmobilepaymentservice.entity.CardEntity;
+import com.example.smartmobilepaymentservice.exception.RequestValidationException;
 import com.example.smartmobilepaymentservice.service.CardService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,9 +23,14 @@ public class CardController {
 
     @PostMapping("/{ownerId}/add")
     public ResponseEntity<CardEntity> add(
-            @RequestBody CardCreatedDto cardCreatedDto,
-            @PathVariable UUID ownerId
-            ){
+           @Valid @RequestBody CardCreatedDto cardCreatedDto,
+            @PathVariable UUID ownerId,
+            BindingResult bindingResult
+    ){
+        if(bindingResult.hasErrors()){
+            List<ObjectError> allErrors = bindingResult.getAllErrors();
+            throw new RequestValidationException(allErrors);
+        }
         return ResponseEntity.ok(cardService.add(cardCreatedDto,ownerId));
     }
 
@@ -30,15 +39,20 @@ public class CardController {
             @RequestParam int size,
             @RequestParam int page
     ){
-        return ResponseEntity.ok(cardService.getAllUserCards(size, page));
+        return ResponseEntity.status(200).body(cardService.getAllUserCards(size, page));
     }
 
     @PutMapping("/{ownerId}/update")
     public ResponseEntity<CardEntity> update(
-            @RequestBody CardCreatedDto cardCreatedDto,
+          @Valid  @RequestBody CardCreatedDto cardCreatedDto,
             @PathVariable UUID ownerId,
-            @RequestParam UUID card_id
-    ){
+            @RequestParam UUID card_id,
+            BindingResult bindingResult
+        ){
+        if(bindingResult.hasErrors()){
+            List<ObjectError> allErrors = bindingResult.getAllErrors();
+            throw new RequestValidationException(allErrors);
+        }
         return ResponseEntity.ok(cardService.update(cardCreatedDto,ownerId,card_id));
     }
 
