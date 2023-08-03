@@ -1,0 +1,25 @@
+server:
+  port: 8085
+spring:
+  application:
+    name: PAYMENT_SERVICE
+  datasource:
+    username: postgres
+    password: 7777
+    url: jdbc:postgresql://localhost:5432/payment_service_db
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQL94Dialect
+services:
+  product-url: http://PRODUCT_SERVICE/product
+eureka:
+  client:
+    service-url:
+      defaultUrl: ${EUREKA_URI:http://localhost:8761/eureka/}
+
+    instance:
+      preferIpAddress: true
