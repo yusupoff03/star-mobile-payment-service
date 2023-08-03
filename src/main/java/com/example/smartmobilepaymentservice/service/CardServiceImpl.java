@@ -9,6 +9,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 import java.util.UUID;
@@ -38,7 +39,7 @@ public class CardServiceImpl implements CardService{
     }
 
     @Override
-    public void deleteById(UUID card_id, UUID owner_id) {
+    public Boolean deleteById(UUID card_id, UUID owner_id) {
         CardEntity cardEntity = cardRepository.findById(card_id)
                 .orElseThrow(() -> new DataNotFoundException("Card not found"));
         if (cardEntity.getOwner_id().equals(owner_id)) {
@@ -57,4 +58,6 @@ public class CardServiceImpl implements CardService{
         }
         throw new DataNotFoundException("User not found");
     }
+
+
 }
